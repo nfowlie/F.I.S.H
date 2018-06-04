@@ -5,8 +5,8 @@
 
 body{
     background-color: rgb(28,107,160);
-    -webkit-app-region: drag;
-    height: 600px;
+    /* -webkit-app-region: drag; */
+    height: 100%;
     width: 100%;
     font-family: sans-serif;
     color: #ffffff;
@@ -14,7 +14,7 @@ body{
 
 nav{
     width: 100%;
-    height: 100px;
+    height: 20vh;
     
     text-transform: uppercase;
     color: #ffffff;
@@ -33,15 +33,29 @@ nav > div{
     align-items: center;
 }
 
-.header{
-    font-size: 50px;
-    text-align: center;
+.fish{
+    height: 80vh;
+    width: 100vw;
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.items{
-    font-size: 40px;
-    margin-left: 25px;
-    cursor: pointer;
+.tank{
+    width: 49.85vw;
+    height: 39.85vh;
+    overflow: auto;
+}
+
+.tank:nth-child(2n - 1){
+    border-right: .15vw solid #268afa;
+}
+
+.tank:first-child, .tank:nth-child(2){
+    border-bottom: .15vw solid #268afa;
+}
+
+.tank > .tank-header{
+    border-bottom: .1vw solid #000000;
 }
 
 .items > span{

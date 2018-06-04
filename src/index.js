@@ -8,6 +8,9 @@ let win;
 
 const fishBtn = document.getElementById("fish");
 fishBtn.addEventListener("click", function(event){
+
+    // let winChild = new BrowserWindow({parent: win });
+    // winChild.show();
     
     // win = new BrowserWindow({width: 1000, height: 800});
     // const viewPath = path.join("file://", __dirname, "views/fish.html");
