@@ -43,7 +43,18 @@ nav > div{
 .tank{
     width: 49.85vw;
     height: 39.85vh;
+}
+
+.tank-header{
+    height: 5vh;
+    display: flex;
+    align-items: center;
+    /* font-size: 6vh; */
+}
+
+.items{
     overflow: auto;
+    height: 34.75vh;
 }
 
 .tank:nth-child(2n - 1){
