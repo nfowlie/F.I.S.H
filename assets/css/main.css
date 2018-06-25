@@ -46,15 +46,22 @@ nav > div{
 }
 
 .tank-header{
-    height: 5vh;
+    height: 7vh;
     display: flex;
     align-items: center;
-    /* font-size: 6vh; */
+    justify-content: space-between;
+    font-size: 6vh;
+}
+
+.tank-header-button{
+    background-color: black;
+    height: 100%;
+    width: 5vw;
 }
 
 .items{
     overflow: auto;
-    height: 34.75vh;
+    height: 32.75vh;
 }
 
 .tank:nth-child(2n - 1){
@@ -72,6 +79,7 @@ nav > div{
 .items > span{
     display: flex;
     align-items: center;
+    margin: 2vh 0;
 }
 
 .regular-checkbox {

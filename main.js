@@ -6,13 +6,13 @@ const url = require('url');
 const shell = require('electron').shell;
 const ipc = require('electron').ipcMain;
 
-require('electron-reload')(__dirname);
+// require('electron-reload')(__dirname);
 
 var win;
 
 function createWindow() {
     // Create new window
-    win = new BrowserWindow({width: 800, height: 480, frame: true});
+    win = new BrowserWindow({ width: 800, height: 480, frame: false, icon: path.join(__dirname, 'assets/icons/png/fish.png') });
     // Load HTML into window
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'src/index.html'),
@@ -20,7 +20,7 @@ function createWindow() {
         slashes: true
     }));
 
-    // win.maximize();
+    win.maximize();
 
     // win.webContents.openDevTools();
 
@@ -43,7 +43,7 @@ function createWindow() {
         },
         {
             label: 'Info',
-            click(){
+            click() {
                 win.webContents.openDevTools();
             }
         }
