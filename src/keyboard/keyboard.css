@@ -1,0 +1,178 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#container {
+    font: 4vh Verdana, Sans-Serif;
+    width: 100vw;
+    height: 58.5vh;
+    display: none;
+    position: absolute;
+    bottom: 0vh;
+    z-index: 100;
+    background-color: #222222;
+    /* display: none; */
+}
+
+#keyboard {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#keyboard li {
+    float: left;
+    margin: 0 .6vw .6vw 0;
+    width: 6.35vw;
+    height: 8.5vh;
+    line-height: 10.4vh;
+    text-align: center;
+    background: #454545;
+    border: 1px solid #454545;
+    color: #ffffff;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+#keyboard li.empty {
+    width: 2.03vw;
+    /*height: 1vh;*/
+    visibility: hidden;
+}
+
+#keyboard .tab, #keyboard .delete {
+    width: 7.6vw;
+}
+
+#keyboard .shift, #keyboard .delete, #keyboard .return, #keyboard .number {
+    /*background-color: #252525;*/
+}
+
+#keyboard .capslock {
+    width: 7.5vw;
+}
+
+#keyboard .return, #keyboard .number {
+    width: 9.05vw;
+}
+
+#keyboard .shift {
+    width: 7.6vw;
+}
+
+.lastitem {
+    margin-right: 0;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+#keyboard .space {
+    width: 80vw;
+}
+
+.on, .symbol-on {
+    display: none;
+}
+
+#keyboard li:hover {
+    position: relative;
+    top: 1px;
+    left: 1px;
+    cursor: pointer;
+    /*border-color: #a5a5a5;*/
+    /*cursor: pointer;*/
+}
+
+#keyboard li:active {
+    /* background-color: #404040; */
+    /* border-color: #a5a5a5; */
+}
+
+#keyboard li::selection {
+    background: none;
+}
+
+@media (orientation: portrait) {
+    #container {
+        left: 26.05vw;
+        width: 71.92vw;
+        padding: 1vh 1vw 0 1vw;
+        background-color: #e0e3e5;
+    }
+    #keyboard li {
+        height: 4.8vh;
+        width: 5.8vw;
+        line-height: 4.45vh;
+        font-size: 1.5vh;
+        background-color: #ffffff;
+        color: #d0081c;
+        border: none;
+    }
+    #search {
+        right: 0vw;
+        width: 70vw;
+        margin-top: 4.4vh
+    }
+    input.search {
+        /* padding: 0.7vh 1.5vw 0.7vh 1.472vw */
+    }
+    #search i {
+        right: 6vw;
+        top: 6.5vh;
+    }
+    input.search.expanded {
+        background-color: #d0081c!important;
+        width: 73.93vw;
+        height: 4.8vh;
+        top: 74.2vh;
+    }
+    #search i.expanded {
+        top: 69vh;
+    }
+    #keyboard .row {
+        padding: .31vh 0;
+    }
+    #keyboard .row:nth-child(7) > li, #keyboard .row:nth-child(8) > li {
+        height: 5.15vh;
+    }
+}
+
+@media (orientation: landscape) {
+    #container {
+        background-color: #e0e3e5;
+    }
+    #keyboard li {
+        background-color: #ffffff;
+        color: #d0081c;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #container input {
+        height: 10vh;
+        margin-bottom: 1vh;
+        font-size: 5vh;
+        width: 100vw;
+        text-align: center;
+        border: none;
+    }
+}
