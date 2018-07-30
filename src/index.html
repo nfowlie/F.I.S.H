@@ -49,6 +49,17 @@
         <link rel="stylesheet" href="./keyboard/keyboard.css">
 
         <div id="container">
+            <div id="picker">
+                <input id='date-picker' placeholder="Select Date"></input>
+                <div class="dropdown">
+                    <button class="dropbtn">Frequency</button>
+                    <div class='dropdown-content'>
+                        <a href="#">Daily</a>
+                        <a href="#">Weekly</a>
+                        <a href="#">Monthly</a>
+                    </div>
+                </div>
+            </div>
             <input id='search-box' type="text">
             <ul id="keyboard">
                 <li class="symbol">
@@ -173,6 +184,10 @@
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
         <script type="text/javascript" src="./keyboard/keyboard.js"></script>
     </div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="./js/luxon.min.js"></script>
+    <script>luxon.DateTime.local();</script>
     <script src="../node_modules/pouchdb/dist/pouchdb.min.js"></script>
     <script src="index.js"></script>
 

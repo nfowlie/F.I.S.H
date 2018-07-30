@@ -87,7 +87,8 @@ function keyboardPress(e) {
 
     if (key.textContent === 'return') {
         document.getElementById("container").style.display = "none";
-        addToTank({tank: currentTank, item: write.value});
+        var dp = document.getElementById("date-picker");
+        addToTank({tank: currentTank, task: write.value, first: dp.value, frequency: currentFrequency});
     }
 
     // clearTimeout(delayTimer);

@@ -6,7 +6,7 @@ const url = require('url');
 const shell = require('electron').shell;
 const ipc = require('electron').ipcMain;
 
-require('electron-reload')(__dirname);
+// require('electron-reload')(__dirname);
 
 var win;
 
@@ -22,7 +22,7 @@ function createWindow() {
 
     // win.maximize();
 
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
 
     win.on('closed', () => {
         win = null;
