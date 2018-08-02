@@ -1,10 +1,10 @@
-*{
+* {
     margin: 0;
     padding: 0;
 }
 
-body{
-    background-color: rgb(28,107,160);
+body {
+    background-color: rgb(28, 107, 160);
     /* -webkit-app-region: drag; */
     height: 100%;
     width: 100%;
@@ -12,19 +12,87 @@ body{
     color: #ffffff;
 }
 
-nav{
+#settings {
+    position: fixed;
+    top: 1vw;
+    right: 1vw;
+    font-size: 5vh;
+}
+
+#settings-container {
+    position: fixed;
+    background-color: #ffffff;
+    height: 79.9vh;
+    width: 100vw;
+    z-index: 33;
+    bottom: 0;
+    left: 0;
+    display: none;
+    overflow: auto;
+    color: black;
+}
+
+#settings-container .tank-header{
+    height: 13vh;
+}
+
+#settings-container.visible {
+    display: block;
+}
+
+#settings-container .items {
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#settings-container .items > div {
+    width: 100vw;
+    padding: 1vh 0;
+}
+
+#settings-container .tank {
+    height: auto;
+    width: 100vw;
+}
+
+#settings-container .tank:nth-child(2n - 1) {
+    border-right: none;
+}
+
+.delete {
+    -webkit-appearance: none;
+    background-color: #fafafa;
+    border: 1px solid #cacece;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+    padding: 12px 15px;
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+    margin-right: 20px;
+}
+
+.tank-name {
+    font-size: 6vh;
+}
+
+.task-name {
+    margin-left: .5vw;
+}
+
+nav {
     width: 100%;
     height: 20vh;
-    
     text-transform: uppercase;
     color: #ffffff;
     display: flex;
     background: linear-gradient(to right, #6754a4 20%, #268afa 80%);
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
 }
 
-nav > div{
+nav > div {
     cursor: pointer;
     font-size: 40px;
     font-family: sans-serif;
@@ -33,19 +101,19 @@ nav > div{
     align-items: center;
 }
 
-.fish{
+.fish {
     height: 80vh;
     width: 100vw;
     display: flex;
     flex-wrap: wrap;
 }
 
-.tank{
+.tank {
     width: 49.85vw;
     height: 39.85vh;
 }
 
-.tank-header{
+.tank-header {
     height: 7vh;
     display: flex;
     align-items: center;
@@ -53,63 +121,66 @@ nav > div{
     font-size: 6vh;
 }
 
-.tank-header-button{
-    background-color: black;
+.tank-header-button {
+    /* background-color: black; */
     height: 100%;
     width: 5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.items{
+.items {
     overflow: auto;
     height: 32.75vh;
 }
 
-.tank:nth-child(2n - 1){
+.tank:nth-child(2n - 1) {
     border-right: .15vw solid #268afa;
 }
 
-.tank:first-child, .tank:nth-child(2){
+.tank:first-child, .tank:nth-child(2) {
     border-bottom: .15vw solid #268afa;
 }
 
-.tank > .tank-header{
+.tank > .tank-header {
     border-bottom: .1vw solid #000000;
 }
 
-.items > span{
+.items > span {
     display: flex;
     align-items: center;
     margin: 2vh 0;
 }
 
 .regular-checkbox {
-	-webkit-appearance: none;
-	background-color: #fafafa;
-	border: 1px solid #cacece;
-	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
-	padding: 18px;
-	border-radius: 3px;
-	display: inline-block;
+    -webkit-appearance: none;
+    background-color: #fafafa;
+    border: 1px solid #cacece;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+    padding: 18px;
+    border-radius: 3px;
+    display: inline-block;
     position: relative;
     margin-right: 20px;
 }
 
 .regular-checkbox:active, .regular-checkbox:checked:active {
-	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .regular-checkbox:checked {
-	background-color: #e9ecee;
-	border: 1px solid #adb8c0;
-	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
-	color: #99a1a7;
+    background-color: #e9ecee;
+    border: 1px solid #adb8c0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05), inset 15px 10px -12px rgba(255, 255, 255, 0.1);
+    color: #99a1a7;
 }
 
 .regular-checkbox:checked:after {
-	content: '\2714';
-	position: absolute;
-	top: 0px;
+    content: '\2714';
+    position: absolute;
+    top: 0px;
     font-size: 28px;
-	left: 6px;
-	color: #99a1a7;
+    left: 6px;
+    color: #99a1a7;
 }

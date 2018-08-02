@@ -10,18 +10,24 @@ let win;
 
 const fishBtn = document.getElementById("fish");
 fishBtn.addEventListener("click", function (event) {
-
-    // let winChild = new BrowserWindow({parent: win });
-    // winChild.show();
-
-    // win = new BrowserWindow({width: 1000, height: 800});
-    // const viewPath = path.join("file://", __dirname, "views/fish.html");
-    // win.loadURL(url.format({
-    //     pathname: path.join(__dirname, 'views/fish.html'),
-    //     protocol: 'file:',
-    //     slashes: true
-    // }));
+    document.getElementById("container").style.display = "block";
 });
+
+const settingsButton = document.getElementById("settings");
+settingsButton.addEventListener("click", function (event) {
+    // db.destroy();
+    document.getElementById("settings-container").classList.toggle("visible");
+    console.log(db);
+    setting = !setting;
+    if (setting) {
+        getTanks("settings");
+    }
+    else {
+        getTanks('');
+    }
+});
+
+var setting = false;
 
 // var db = new PouchDB('http://127.0.0.1:5984/fish');
 var db = new PouchDB('fish');
@@ -75,35 +81,8 @@ dropdowns.forEach(a => {
 });
 
 db.bulkDocs([
-    {
-        _id: luxon.DateTime.local().toJSON(),
-        tank: '29 Gallon',
-        task: 'Refill tank',
-        schedule: {
-            first: luxon.DateTime.local().toLocaleString(),
-            frequency: 'Weekly'
-        }
-    },
-    {
-        _id: luxon.DateTime.local().toJSON(),
-        tank: '10 Gallon',
-        task: 'Refill tank',
-        schedule: {
-            first: luxon.DateTime.local().toLocaleString(),
-            frequency: 'Weekly'
-        }
-    },
-    {
-        _id: luxon.DateTime.local().toJSON(),
-        tank: 'Chi',
-        task: 'Refill tank',
-        schedule: {
-            first: luxon.DateTime.local().toLocaleString(),
-            frequency: 'Weekly'
-        }
-    }
 ]).then(function () {
-    getTanks();
+    getTanks('');
 });
 
 var addToTank = function (newItem) {
@@ -115,15 +94,41 @@ var addToTank = function (newItem) {
             first: newItem.first,
             frequency: newItem.frequency
         }
+    }).then(function () {
+        getTanks('');
     });
-    getTanks();
 };
 
 var currentTank;
 
-var getTanks = function () {
-    var fishContainer = document.getElementsByClassName('fish')[0];
-    fishContainer.innerHTML = "";
+var deleteTask = function (thisTask, tankOrTask) {
+    console.log(thisTask);
+
+    if (tankOrTask === "tank") {
+        db.allDocs({
+            include_docs: true,
+            attachments: true
+        }).then(function (result) {
+            result.rows.forEach(function (r) {
+                if (r.doc.tank === thisTask) {
+                    r.doc._deleted = true;
+                    db.put(r.doc);
+                }
+            });
+            getTanks("settings");
+        });
+    }
+    else if (tankOrTask === "task") {
+        db.get(thisTask).then(function (doc) {
+            doc._deleted = true;
+            return db.put(doc);
+        }).then(function () {
+            getTanks("settings");
+        });
+    }
+};
+
+var getTanks = function (type) {
     var tankList = {};
 
     db.allDocs({
@@ -140,39 +145,99 @@ var getTanks = function () {
             tankList[r.doc.tank].push(r.doc);
         });
 
-        Object.keys(tankList).forEach(t => {
-            var tankContainer = document.createElement('div');
-            tankContainer.classList.add('tank');
+        if (type === "settings") {
+            var settingsContainer = document.getElementById("settings-container");
+            settingsContainer.innerHTML = "";
 
-            var tankHeader = document.createElement('div');
-            tankHeader.classList.add('tank-header');
+            Object.keys(tankList).forEach(t => {
+                // if (tankList[t].length > 1) {
+                var tankContainer = document.createElement('div');
+                tankContainer.classList.add('tank');
 
-            var tankHeaderText = document.createElement('div');
-            tankHeaderText.textContent = t;
+                var tankHeader = document.createElement('div');
+                tankHeader.classList.add('tank-header');
 
-            var tankHeaderButton = document.createElement('div');
-            tankHeaderButton.classList.add('tank-header-button');
-            tankHeaderButton.dataset.tank = t;
-            tankHeaderButton.addEventListener('click', function () {
-                currentTank = this.dataset.tank;
-                document.getElementById("container").style.display = "block";
+                var tankHeaderText = document.createElement('div');
+                // tankHeaderText.textContent = t;
+                tankHeaderText.innerHTML += '<div><span class="delete" onclick="deleteTask(\'' + t + '\',\'tank\')"><i class="fas fa-times"></i></span>' + t + '</div>';
+
+                tankHeader.appendChild(tankHeaderText);
+
+                var itemsContainer = document.createElement('div');
+                itemsContainer.classList.add('items');
+
+                tankContainer.appendChild(tankHeader);
+                tankContainer.appendChild(itemsContainer);
+
+                tankList[t].forEach(n => {
+                    if (n.schedule.frequency != "New Tank") {
+                        itemsContainer.innerHTML += '<div><span class="delete" onclick="deleteTask(\'' + n._id + '\',\'task\')"><i class="fas fa-times"></i></span>' + n.task + '</div>';
+                    }
+                });
+
+                settingsContainer.appendChild(tankContainer);
+                // }
             });
+        }
+        else {
+            var fishContainer = document.getElementsByClassName('fish')[0];
+            fishContainer.innerHTML = "";
 
-            tankHeader.appendChild(tankHeaderText);
-            tankHeader.appendChild(tankHeaderButton);
+            Object.keys(tankList).forEach(t => {
+                var tankContainer = document.createElement('div');
+                tankContainer.classList.add('tank');
 
-            var itemsContainer = document.createElement('div');
-            itemsContainer.classList.add('items');
+                var tankHeader = document.createElement('div');
+                tankHeader.classList.add('tank-header');
 
-            tankContainer.appendChild(tankHeader);
-            tankContainer.appendChild(itemsContainer);
+                var tankHeaderText = document.createElement('div');
+                tankHeaderText.textContent = t;
 
-            tankList[t].forEach(n => {
-                itemsContainer.innerHTML += itemStart + n.task + itemEnd;
+                var tankHeaderButton = document.createElement('div');
+                tankHeaderButton.classList.add('tank-header-button');
+                tankHeaderButton.classList.add("fas", "fa-plus-square");
+                tankHeaderButton.dataset.tank = t;
+                tankHeaderButton.addEventListener('click', function () {
+                    currentTank = this.dataset.tank;
+                    document.getElementById("container").style.display = "block";
+                });
+
+                tankHeader.appendChild(tankHeaderText);
+                tankHeader.appendChild(tankHeaderButton);
+
+                var itemsContainer = document.createElement('div');
+                itemsContainer.classList.add('items');
+
+                tankContainer.appendChild(tankHeader);
+                tankContainer.appendChild(itemsContainer);
+
+                tankList[t].forEach(n => {
+                    if (n.schedule.frequency === "Daily") {
+                        itemsContainer.innerHTML += itemStart + n.task + itemEnd;
+                    }
+                    if (n.schedule.frequency === "Weekly") {
+                        var start = luxon.DateTime.fromISO(n.schedule.first);
+                        var end = luxon.DateTime.local();
+                        var diffInDays = end.diff(start, 'days');
+                        console.log(diffInDays.toObject().days % 7 < 1);
+                        if (diffInDays.toObject().days % 7 < 1 && diffInDays.toObject().days > 0) {
+                            itemsContainer.innerHTML += itemStart + n.task + itemEnd;
+                        }
+                    }
+                    if (n.schedule.frequency === "Monthly") {
+                        var start = luxon.DateTime.fromISO(n.schedule.first);
+                        var end = luxon.DateTime.local();
+                        var diffInDays = end.diff(start, 'days');
+                        console.log(diffInDays.toObject().days % 28);
+                        if (diffInDays.toObject().days % 28 < 1 && diffInDays.toObject().days > 0) {
+                            itemsContainer.innerHTML += itemStart + n.task + itemEnd;
+                        }
+                    }
+                });
+
+                fishContainer.appendChild(tankContainer);
             });
-
-            fishContainer.appendChild(tankContainer);
-        });
+        }
     }).catch(function (err) {
         console.log(err);
     });

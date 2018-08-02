@@ -12,15 +12,6 @@ function keyboardPress(e) {
             keyLetter.classList.toggle("uppercase");
         });
 
-        var arrSym = document.getElementsByClassName("symbol");
-        arrSym = [].slice.call(arrSym);
-        arrSym.forEach(function (keySymbol) {
-            keySymbol.children[0].classList.toggle("on");
-            keySymbol.children[0].classList.toggle("off");
-            keySymbol.children[1].classList.toggle("on");
-            keySymbol.children[1].classList.toggle("off");
-        });
-
         shift = (shift === true) ? false : true;
         return false;
     }
@@ -31,26 +22,18 @@ function keyboardPress(e) {
 
         write.value = html.substr(0, html.length - 1);
 
-        // clearTimeout(delayTimer);
-        // delayTimer = setTimeout(function () {
-        //     search(document.getElementById("search").firstElementChild);
-        // }, 0);
         return false;
     }
 
     // Number Characters
     if (key.classList.contains('number')) {
-        var rowArr = document.getElementsByClassName("symbol");
+        var rowArr = document.getElementsByClassName("row");
         rowArr = [].slice.call(rowArr);
         rowArr.forEach(function (keySymbol) {
             keySymbol.classList.toggle("symbol-off");
             keySymbol.classList.toggle("symbol-on");
         });
         return false;
-    }
-
-    if (key.classList.contains('symbol')) {
-        character = key.querySelector(".off").textContent;
     }
 
     // Special characters
@@ -67,37 +50,30 @@ function keyboardPress(e) {
             keyLetter.classList.toggle("uppercase");
         });
 
-        var arrSyms = document.getElementsByClassName("symbol");
-        arrSyms = [].slice.call(arrSyms);
-        arrSyms.forEach(function (keySymbol) {
-            keySymbol.children[0].classList.toggle("on");
-            keySymbol.children[0].classList.toggle("off");
-            keySymbol.children[1].classList.toggle("on");
-            keySymbol.children[1].classList.toggle("off");
-        });
-
         shift = false;
     }
 
     // Add the character
-    if (key.textContent != 'return') {
+    if (!key.classList.contains('return')) {
         write.value = write.value + character;
     }
     // searchFocused();
 
-    if (key.textContent === 'return') {
-        document.getElementById("container").style.display = "none";
-        var dp = document.getElementById("date-picker");
-        addToTank({tank: currentTank, task: write.value, first: dp.value, frequency: currentFrequency});
+    if (key.classList.contains('return')) {
+        if (currentFrequency === "New Tank") {
+            document.getElementById("container").style.display = "none";
+            addToTank({ tank: write.value, task: '', first: luxon.DateTime.local(), frequency: currentFrequency });
+        }
+        else if(currentFrequency === undefined || currentFrequency === "Cancel") {
+            document.getElementById("container").style.display = "none";
+        }
+        else{
+            document.getElementById("container").style.display = "none";
+            var dp = document.getElementById("date-picker");
+            addToTank({ tank: currentTank, task: write.value, first: luxon.DateTime.fromISO(dp.value).toISO(), frequency: currentFrequency });
+        }
     }
-
-    // clearTimeout(delayTimer);
-    // delayTimer = setTimeout(function () {
-    //     search(document.getElementById("search").firstElementChild);
-    // }, 0);
 }
-
-// var delayTimer;
 
 var li = document.getElementsByTagName("LI");
 for (var l = 0; l < li.length; l++) {

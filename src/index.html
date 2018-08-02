@@ -3,13 +3,14 @@
 
 <head>
     <title>F.I.S.H.</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 
 <body>
     <nav>
         <div id="fish">fish</div>
-        <div id="groceries">groceries</div>
+        <div id="settings"><i class="fas fa-cogs"></i></div>
     </nav>
     <div id="views">
         <div class="fish">
@@ -57,129 +58,112 @@
                         <a href="#">Daily</a>
                         <a href="#">Weekly</a>
                         <a href="#">Monthly</a>
+                        <a href="#">New Tank</a>
+                        <a href="#">Cancel</a>
                     </div>
                 </div>
             </div>
-            <input id='search-box' type="text">
+            <div id="search-container">
+                <input id='search-box' type="text">
+            </div>
             <ul id="keyboard">
-                <li class="symbol">
-                    <span class="off">`</span>
-                    <span class="on">~</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">1</span>
-                    <span class="on">!</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">2</span>
-                    <span class="on">@</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">3</span>
-                    <span class="on">#</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">4</span>
-                    <span class="on">$</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">5</span>
-                    <span class="on">%</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">6</span>
-                    <span class="on">^</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">7</span>
-                    <span class="on">&amp;</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">8</span>
-                    <span class="on">*</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">9</span>
-                    <span class="on">(</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">0</span>
-                    <span class="on">)</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">-</span>
-                    <span class="on">_</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">=</span>
-                    <span class="on">+</span>
-                </li>
-                <li class="delete lastitem">delete</li>
-                <li class="tab shift">tab</li>
-                <li class="letter">q</li>
-                <li class="letter">w</li>
-                <li class="letter">e</li>
-                <li class="letter">r</li>
-                <li class="letter">t</li>
-                <li class="letter">y</li>
-                <li class="letter">u</li>
-                <li class="letter">i</li>
-                <li class="letter">o</li>
-                <li class="letter">p</li>
-                <li class="symbol">
-                    <span class="off">[</span>
-                    <span class="on">{</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">]</span>
-                    <span class="on">}</span>
-                </li>
-                <li class="symbol lastitem">
-                    <span class="off">\</span>
-                    <span class="on">|</span>
-                </li>
-                <li class="capslock shift">caps</li>
-                <li class="letter">a</li>
-                <li class="letter">s</li>
-                <li class="letter">d</li>
-                <li class="letter">f</li>
-                <li class="letter">g</li>
-                <li class="letter">h</li>
-                <li class="letter">j</li>
-                <li class="letter">k</li>
-                <li class="letter">l</li>
-                <li class="symbol">
-                    <span class="off">;</span>
-                    <span class="on">:</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">'</span>
-                    <span class="on">&quot;</span>
-                </li>
-                <li class="return lastitem">return</li>
-                <li class="left-shift shift">shift</li>
-                <li class="letter">z</li>
-                <li class="letter">x</li>
-                <li class="letter">c</li>
-                <li class="letter">v</li>
-                <li class="letter">b</li>
-                <li class="letter">n</li>
-                <li class="letter">m</li>
-                <li class="symbol">
-                    <span class="off">,</span>
-                    <span class="on">&lt;</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">.</span>
-                    <span class="on">&gt;</span>
-                </li>
-                <li class="symbol">
-                    <span class="off">/</span>
-                    <span class="on">?</span>
-                </li>
-                <li class="right-shift shift lastitem">shift</li>
-                <li class="space lastitem">&nbsp;</li>
+                <div class="row symbol-off">
+                    <li class="letter">q</li>
+                    <li class="letter">w</li>
+                    <li class="letter">e</li>
+                    <li class="letter">r</li>
+                    <li class="letter">t</li>
+                    <li class="letter">y</li>
+                    <li class="letter">u</li>
+                    <li class="letter">i</li>
+                    <li class="letter">o</li>
+                    <li class="letter">p</li>
+                </div>
+                <div class="row symbol-on">
+                    <li class="letter">1</li>
+                    <li class="letter">2</li>
+                    <li class="letter">3</li>
+                    <li class="letter">4</li>
+                    <li class="letter">5</li>
+                    <li class="letter">6</li>
+                    <li class="letter">7</li>
+                    <li class="letter">8</li>
+                    <li class="letter">9</li>
+                    <li class="letter">0</li>
+                </div>
+                <div class="row symbol-off">
+                    <li class="letter">a</li>
+                    <li class="letter">s</li>
+                    <li class="letter">d</li>
+                    <li class="letter">f</li>
+                    <li class="letter">g</li>
+                    <li class="letter">h</li>
+                    <li class="letter">j</li>
+                    <li class="letter">k</li>
+                    <li class="letter">l</li>
+                </div>
+                <div class="row symbol-on">
+                    <li class="letter">@</li>
+                    <li class="letter">#</li>
+                    <li class="letter">$</li>
+                    <li class="letter">_</li>
+                    <li class="letter">&amp;</li>
+                    <li class="letter">-</li>
+                    <li class="letter">+</li>
+                    <li class="letter">(</li>
+                    <li class="letter">)</li>
+                    <li class="letter">/</li>
+                </div>
+                <div class="row symbol-off">
+                    <li class="shift">&#8679;</li>
+                    <li class="empty"></li>
+                    <li class="letter">z</li>
+                    <li class="letter">x</li>
+                    <li class="letter">c</li>
+                    <li class="letter">v</li>
+                    <li class="letter">b</li>
+                    <li class="letter">n</li>
+                    <li class="letter">m</li>
+                    <li class="empty"></li>
+                    <li class="delete lastitem">&#x232b;</li>
+                </div>
+                <div class="row symbol-on">
+                    <li class="shift">&#8679;</li>
+                    <li class="empty"></li>
+                    <li class="letter">*</li>
+                    <li class="letter">"</li>
+                    <li class="letter">'</li>
+                    <li class="letter">:</li>
+                    <li class="letter">;</li>
+                    <li class="letter">!</li>
+                    <li class="letter">?</li>
+                    <li class="empty"></li>
+                    <li class="delete lastitem">&#x232b;</li>
+                </div>
+                <div class="row symbol-off">
+                    <li class="number">123</li>
+                    <li class="letter">,</li>
+                    <li class="space lastitem">&nbsp;</li>
+                    <li class="letter">.</li>
+                    <li class="return lastitem">&#x23ce;</li>
+                </div>
+                <div class="row symbol-on">
+                    <li class="number">123</li>
+                    <li class="letter">,</li>
+                    <li class="space lastitem">&nbsp;</li>
+                    <li class="letter">.</li>
+                    <li class="return lastitem">&#x23ce;</li>
+                </div>
             </ul>
+        </div>
+        <div id="settings-container">
+            <span class="item">
+                <div class="delete"><i class="fas fa-times"></i></div>
+                <div class="item">
+                    <div class="tank-name">Tank 1</div>
+                    <div class="task-name">Task</div>
+                </div>
+            </span>
         </div>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
         <script type="text/javascript" src="./keyboard/keyboard.js"></script>
