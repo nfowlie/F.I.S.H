@@ -8,39 +8,33 @@ const itemEnd = '</input></span>';
 
 let win;
 
+var container = document.getElementById("container");
+var settingsContainer = document.getElementById("settings-container");
+var textBox = document.getElementById("search-box");
+var dropDownBtn = document.getElementsByClassName("dropbtn")[0];
+
 const fishBtn = document.getElementById("fish");
 fishBtn.addEventListener("click", function (event) {
-    document.getElementById("container").style.display = "block";
-    document.getElementById("container").classList.add("fish");
+    container.style.display = "block";
+    container.classList.add("fish");
     currentFrequency = "New Tank";
-    document.getElementById("settings-container").classList.remove("visible");
+    settingsContainer.classList.remove("visible");
 });
 
 const settingsButton = document.getElementById("settings");
 settingsButton.addEventListener("click", function (event) {
-    // db.destroy();
     exitAdd();
-    document.getElementById("settings-container").classList.toggle("visible");
-    console.log(db);
+    settingsContainer.classList.toggle("visible");
     setting = !setting;
-    if (setting) {
-        getTanks("settings");
-    }
-    else {
-        getTanks('');
-    }
+    getTanks();
 });
 
 var exitAdd = function () {
-    document.getElementById("container").style.display = "none";
-    document.getElementsByClassName("dropbtn")[0].textContent = "Frequency";
+    container.style.display = "none";
+    dropDownBtn.textContent = "Frequency";
     currentFrequency = "";
-    document.getElementById("search-box").textContent = "";
-    document.getElementById("search-box").value = "";
-    // document.getElementById("date-picker").value = "";
-    // document.getElementById("date-picker").textContent = "";
-    // document.querySelector(".flatpickr-input .form-control .input").textContent = "";
-    // document.querySelector(".flatpickr-input .form-control .input").value = "";
+    textBox.textContent = "";
+    textBox.value = "";
 };
 
 document.getElementById("exit").addEventListener("click", function () {
@@ -70,18 +64,6 @@ db.get('config').catch(function (err) {
 
 });
 
-// db.put({
-//     _id: luxon.DateTime.local().toJSON(),
-//     tank: '29 Gallon',
-//     task: 'Refill tank',
-//     schedule: {
-//         first: luxon.DateTime.local().toLocaleString(),
-//         frequency: ''
-//     }
-// }).then(function (doc) {
-//     console.log(doc);
-// });
-
 flatpickr("#date-picker", {
     altInput: true,
     altFormat: "F j, Y",
@@ -100,14 +82,14 @@ var dropdowns = document.querySelectorAll(".dropdown-content > a");
 dropdowns.forEach(a => {
     a.dataset.frequency = a.textContent;
     a.addEventListener("click", function () {
-        document.getElementsByClassName("dropbtn")[0].textContent = this.dataset.frequency;
+        dropDownBtn.textContent = this.dataset.frequency;
         currentFrequency = this.dataset.frequency;
     });
 });
 
 db.bulkDocs([
 ]).then(function () {
-    getTanks('');
+    getTanks();
 });
 
 var addToTank = function (newItem) {
@@ -120,15 +102,13 @@ var addToTank = function (newItem) {
             frequency: newItem.frequency
         }
     }).then(function () {
-        getTanks('');
+        getTanks();
     });
 };
 
 var currentTank;
 
 var deleteTask = function (thisTask, tankOrTask) {
-    console.log(thisTask);
-
     if (tankOrTask === "tank") {
         db.allDocs({
             include_docs: true,
@@ -140,7 +120,7 @@ var deleteTask = function (thisTask, tankOrTask) {
                     db.put(r.doc);
                 }
             });
-            getTanks("settings");
+            getTanks();
         });
     }
     else if (tankOrTask === "task") {
@@ -148,7 +128,7 @@ var deleteTask = function (thisTask, tankOrTask) {
             doc._deleted = true;
             return db.put(doc);
         }).then(function () {
-            getTanks("settings");
+            getTanks();
         });
     }
 };
@@ -160,251 +140,117 @@ var getTanks = function (type) {
         include_docs: true,
         attachments: true
     }).then(function (result) {
-        console.log(result);
         result.rows.forEach(r => {
-            console.log(r);
-
             if (!tankList.hasOwnProperty(r.doc.tank)) {
                 tankList[r.doc.tank] = [];
             }
             tankList[r.doc.tank].push(r.doc);
         });
 
-        if (type === "settings") {
-            var settingsContainer = document.getElementById("settings-container");
-            settingsContainer.innerHTML = "";
+        settingsContainer.innerHTML = "";
 
-            Object.keys(tankList).forEach(t => {
-                // if (tankList[t].length > 1) {
-                var tankContainer = document.createElement('div');
-                tankContainer.classList.add('tank');
+        var fishContainer = document.getElementsByClassName('fish')[0];
+        fishContainer.innerHTML = "";
 
-                var tankHeader = document.createElement('div');
-                tankHeader.classList.add('tank-header');
+        Object.keys(tankList).forEach(t => {
+            var tankContainerD = document.createElement('div');
+            tankContainerD.classList.add('tank');
 
-                var tankHeaderText = document.createElement('div');
-                // tankHeaderText.textContent = t;
-                tankHeaderText.innerHTML += '<div><span class="delete" onclick="deleteTask(\'' + t + '\',\'tank\')"><i class="fas fa-times"></i></span>' + t + '</div>';
+            var tankHeaderD = document.createElement('div');
+            tankHeaderD.classList.add('tank-header');
 
-                tankHeader.appendChild(tankHeaderText);
+            var tankHeaderDText = document.createElement('div');
+            tankHeaderDText.innerHTML += '<div><span class="delete" onclick="deleteTask(\'' + t + '\',\'tank\')"><i class="fas fa-times"></i></span>' + t + '</div>';
+            tankHeaderD.appendChild(tankHeaderDText);
 
-                var itemsContainer = document.createElement('div');
-                itemsContainer.classList.add('items');
+            var itemsContainerD = document.createElement('div');
+            itemsContainerD.classList.add('items');
 
-                tankContainer.appendChild(tankHeader);
-                tankContainer.appendChild(itemsContainer);
+            tankContainerD.appendChild(tankHeaderD);
+            tankContainerD.appendChild(itemsContainerD);
 
-                tankList[t].forEach(n => {
-                    if (n.schedule.frequency != "New Tank") {
-                        itemsContainer.innerHTML += '<div><span class="delete" onclick="deleteTask(\'' + n._id + '\',\'task\')"><i class="fas fa-times"></i></span>' + n.task + '</div>';
-                    }
-                });
-
-                settingsContainer.appendChild(tankContainer);
-                // }
+            tankList[t].forEach(n => {
+                if (n.schedule.frequency != "New Tank") {
+                    itemsContainerD.innerHTML += '<div><span class="delete" onclick="deleteTask(\'' + n._id + '\',\'task\')"><i class="fas fa-times"></i></span>' + n.task + '</div>';
+                }
             });
 
-            var fishContainer = document.getElementsByClassName('fish')[0];
-            fishContainer.innerHTML = "";
+            settingsContainer.appendChild(tankContainerD);
 
-            Object.keys(tankList).forEach(t => {
-                var tankContainer = document.createElement('div');
-                tankContainer.classList.add('tank');
+            var tankContainer = document.createElement('div');
+            tankContainer.classList.add('tank');
 
-                var tankHeader = document.createElement('div');
-                tankHeader.classList.add('tank-header');
+            var tankHeader = document.createElement('div');
+            tankHeader.classList.add('tank-header');
 
-                var tankHeaderText = document.createElement('div');
-                tankHeaderText.textContent = t;
+            var tankHeaderText = document.createElement('div');
+            tankHeaderText.textContent = t;
 
-                var tankHeaderButton = document.createElement('div');
-                tankHeaderButton.classList.add('tank-header-button');
-                tankHeaderButton.classList.add("fas", "fa-plus-square");
-                tankHeaderButton.dataset.tank = t;
-                tankHeaderButton.addEventListener('click', function () {
-                    currentTank = this.dataset.tank;
-                    document.getElementById("container").style.display = "block";
-                    document.getElementById("container").classList.remove("fish");
-                });
+            var tankHeaderButton = document.createElement('div');
+            tankHeaderButton.classList.add('tank-header-button');
+            tankHeaderButton.classList.add("fas", "fa-plus-square");
+            tankHeaderButton.dataset.tank = t;
+            tankHeaderButton.addEventListener('click', function () {
+                currentTank = this.dataset.tank;
+                container.style.display = "block";
+                container.classList.remove("fish");
+            });
 
-                tankHeader.appendChild(tankHeaderText);
-                tankHeader.appendChild(tankHeaderButton);
+            tankHeader.appendChild(tankHeaderText);
+            tankHeader.appendChild(tankHeaderButton);
 
-                var itemsContainer = document.createElement('div');
-                itemsContainer.classList.add('items');
+            var itemsContainer = document.createElement('div');
+            itemsContainer.classList.add('items');
 
-                tankContainer.appendChild(tankHeader);
-                tankContainer.appendChild(itemsContainer);
+            tankContainer.appendChild(tankHeader);
+            tankContainer.appendChild(itemsContainer);
 
-                tankList[t].forEach(n => {
-                    if (n.schedule.frequency === "Daily") {
+            tankList[t].forEach(n => {
+                if (n.schedule.frequency === "Daily") {
+                    itemsContainer.innerHTML += itemStart + n.task + itemEnd;
+                }
+                if (n.schedule.frequency === "Weekly") {
+                    var start = luxon.DateTime.fromISO(n.schedule.first);
+                    var end = luxon.DateTime.local();
+                    var diffInDays = end.diff(start, 'days');
+                    if (diffInDays.toObject().days % 7 < 1 && diffInDays.toObject().days > 0) {
                         itemsContainer.innerHTML += itemStart + n.task + itemEnd;
                     }
-                    if (n.schedule.frequency === "Weekly") {
-                        var start = luxon.DateTime.fromISO(n.schedule.first);
-                        var end = luxon.DateTime.local();
-                        var diffInDays = end.diff(start, 'days');
-                        console.log(diffInDays.toObject().days % 7 < 1);
-                        if (diffInDays.toObject().days % 7 < 1 && diffInDays.toObject().days > 0) {
-                            itemsContainer.innerHTML += itemStart + n.task + itemEnd;
-                        }
+                }
+                if (n.schedule.frequency === "Monthly") {
+                    var start = luxon.DateTime.fromISO(n.schedule.first);
+                    var end = luxon.DateTime.local();
+                    var diffInDays = end.diff(start, 'days');
+                    if (diffInDays.toObject().days % 28 < 1 && diffInDays.toObject().days > 0) {
+                        itemsContainer.innerHTML += itemStart + n.task + itemEnd;
                     }
-                    if (n.schedule.frequency === "Monthly") {
-                        var start = luxon.DateTime.fromISO(n.schedule.first);
-                        var end = luxon.DateTime.local();
-                        var diffInDays = end.diff(start, 'days');
-                        console.log(diffInDays.toObject().days % 28);
-                        if (diffInDays.toObject().days % 28 < 1 && diffInDays.toObject().days > 0) {
-                            itemsContainer.innerHTML += itemStart + n.task + itemEnd;
-                        }
-                    }
-                });
-
-                fishContainer.appendChild(tankContainer);
+                }
             });
+            fishContainer.appendChild(tankContainer);
+        });
 
-            var tanks = document.querySelectorAll(".tank");
-            if (document.getElementsByClassName("fish")[0].clientHeight < document.getElementsByClassName("fish")[0].scrollHeight) {
-                tanks.forEach(t => {
-                    t.classList.add("scroll");
-                });
-            }
-            else {
-                tanks.forEach(t => {
-                    t.classList.remove("scroll");
-                });
-            }
+        var tanks = document.querySelectorAll(".tank");
+        if (fishContainer.clientHeight < fishContainer.scrollHeight) {
+            tanks.forEach(t => {
+                t.classList.add("scroll");
+            });
         }
         else {
-            var fishContainer = document.getElementsByClassName('fish')[0];
-            fishContainer.innerHTML = "";
-
-            Object.keys(tankList).forEach(t => {
-                var tankContainer = document.createElement('div');
-                tankContainer.classList.add('tank');
-
-                var tankHeader = document.createElement('div');
-                tankHeader.classList.add('tank-header');
-
-                var tankHeaderText = document.createElement('div');
-                tankHeaderText.textContent = t;
-
-                var tankHeaderButton = document.createElement('div');
-                tankHeaderButton.classList.add('tank-header-button');
-                tankHeaderButton.classList.add("fas", "fa-plus-square");
-                tankHeaderButton.dataset.tank = t;
-                tankHeaderButton.addEventListener('click', function () {
-                    currentTank = this.dataset.tank;
-                    document.getElementById("container").style.display = "block";
-                    document.getElementById("container").classList.remove("fish");
-                });
-
-                tankHeader.appendChild(tankHeaderText);
-                tankHeader.appendChild(tankHeaderButton);
-
-                var itemsContainer = document.createElement('div');
-                itemsContainer.classList.add('items');
-
-                tankContainer.appendChild(tankHeader);
-                tankContainer.appendChild(itemsContainer);
-
-                tankList[t].forEach(n => {
-                    if (n.schedule.frequency === "Daily") {
-                        itemsContainer.innerHTML += itemStart + n.task + itemEnd;
-                    }
-                    if (n.schedule.frequency === "Weekly") {
-                        var start = luxon.DateTime.fromISO(n.schedule.first);
-                        var end = luxon.DateTime.local();
-                        var diffInDays = end.diff(start, 'days');
-                        console.log(diffInDays.toObject().days % 7 < 1);
-                        if (diffInDays.toObject().days % 7 < 1 && diffInDays.toObject().days > 0) {
-                            itemsContainer.innerHTML += itemStart + n.task + itemEnd;
-                        }
-                    }
-                    if (n.schedule.frequency === "Monthly") {
-                        var start = luxon.DateTime.fromISO(n.schedule.first);
-                        var end = luxon.DateTime.local();
-                        var diffInDays = end.diff(start, 'days');
-                        console.log(diffInDays.toObject().days % 28);
-                        if (diffInDays.toObject().days % 28 < 1 && diffInDays.toObject().days > 0) {
-                            itemsContainer.innerHTML += itemStart + n.task + itemEnd;
-                        }
-                    }
-                });
-
-                fishContainer.appendChild(tankContainer);
+            tanks.forEach(t => {
+                t.classList.remove("scroll");
             });
-
-
-            var tanks = document.querySelectorAll(".tank");
-            if (document.getElementsByClassName("fish")[0].clientHeight < document.getElementsByClassName("fish")[0].scrollHeight) {
-                tanks.forEach(t => {
-                    t.classList.add("scroll");
-                });
-            }
-            else {
-                tanks.forEach(t => {
-                    t.classList.remove("scroll");
-                });
-            }
         }
     }).catch(function (err) {
         console.log(err);
     });
-
-
-    // db.get('').then(function (docs) {
-    //     // console.log(docs);
-    //     var fishContainer = document.getElementsByClassName('fish')[0];
-    //     fishContainer.innerHTML = "";
-    //     Object.keys(docs.tank).forEach(t => {
-    //         // console.log(t);
-
-    //         var tankContainer = document.createElement('div');
-    //         tankContainer.classList.add('tank');
-
-    //         var tankHeader = document.createElement('div');
-    //         tankHeader.classList.add('tank-header');
-
-    //         var tankHeaderText = document.createElement('div');
-    //         tankHeaderText.textContent = t;
-
-    //         var tankHeaderButton = document.createElement('div');
-    //         tankHeaderButton.classList.add('tank-header-button');
-    //         tankHeaderButton.dataset.tank = t;
-    //         tankHeaderButton.addEventListener('click', function () {
-    //             // let winChild = new BrowserWindow({ parent: win });
-    //             // winChild.show();
-
-    //             // win = new BrowserWindow({ width: 800, height: 480, frame: false, transparent: true });
-    //             // // win = new BrowserWindow({ width: 800, height: 200, frame: false, transparent: true });
-    //             // const viewPath = path.join("file://", __dirname, "views/fish.html");
-    //             // win.loadURL(url.format({
-    //             //     pathname: path.join(__dirname, 'views/fish.html'),
-    //             //     protocol: 'file:',
-    //             //     slashes: true
-    //             // }));
-    //             // win.webContents.openDevTools();
-    //             currentTank = this.dataset.tank;
-    //             document.getElementById("container").style.display = "block";
-    //         });
-
-    //         tankHeader.appendChild(tankHeaderText);
-    //         tankHeader.appendChild(tankHeaderButton);
-
-    //         var itemsContainer = document.createElement('div');
-    //         itemsContainer.classList.add('items');
-
-    //         tankContainer.appendChild(tankHeader);
-    //         tankContainer.appendChild(itemsContainer);
-
-    //         docs.tank[t].item.forEach(n => {
-    //             // console.log(n);
-    //             itemsContainer.innerHTML += itemStart + n + itemEnd;
-    //         });
-
-    //         fishContainer.appendChild(tankContainer);
-    //     });
-    // });
 };
-// document.getElementsByClassName('items')[0].innerHTML = itemStart + doc.title + itemEnd;
+
+var getData = setInterval(getDataInterval, 3600000);
+
+function getDataInterval() {
+    getTanks();
+}
+
+document.body.addEventListener("touchstart", function () {
+    clearInterval(getDataInterval);
+});

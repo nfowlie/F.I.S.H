@@ -12,6 +12,10 @@ body {
     color: #ffffff;
 }
 
+* {
+    cursor: none!important;
+}
+
 #settings {
     position: fixed;
     top: 1vw;
@@ -93,7 +97,6 @@ nav {
 }
 
 nav > div {
-    cursor: pointer;
     font-size: 40px;
     font-family: sans-serif;
     display: flex;
@@ -199,7 +202,7 @@ nav > div {
     margin-top: 1vh;
 }
 
-.fish::-webkit-scrollbar{
+.fish::-webkit-scrollbar {
     /* width: 0; */
 }
 
@@ -216,7 +219,7 @@ nav > div {
     width: 7vh;
 }
 
-.tank.scroll{
+.tank.scroll {
     width: 48.865vw;
     width: 48.8652vw;
 }
