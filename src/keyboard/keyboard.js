@@ -72,6 +72,7 @@ function keyboardPress(e) {
             var dp = document.getElementById("date-picker");
             addToTank({ tank: currentTank, task: write.value, first: luxon.DateTime.fromISO(dp.value).toISO(), frequency: currentFrequency });
         }
+        exitAdd();
     }
 }
 

@@ -11,11 +11,15 @@ let win;
 const fishBtn = document.getElementById("fish");
 fishBtn.addEventListener("click", function (event) {
     document.getElementById("container").style.display = "block";
+    document.getElementById("container").classList.add("fish");
+    currentFrequency = "New Tank";
+    document.getElementById("settings-container").classList.remove("visible");
 });
 
 const settingsButton = document.getElementById("settings");
 settingsButton.addEventListener("click", function (event) {
     // db.destroy();
+    exitAdd();
     document.getElementById("settings-container").classList.toggle("visible");
     console.log(db);
     setting = !setting;
@@ -25,6 +29,22 @@ settingsButton.addEventListener("click", function (event) {
     else {
         getTanks('');
     }
+});
+
+var exitAdd = function () {
+    document.getElementById("container").style.display = "none";
+    document.getElementsByClassName("dropbtn")[0].textContent = "Frequency";
+    currentFrequency = "";
+    document.getElementById("search-box").textContent = "";
+    document.getElementById("search-box").value = "";
+    // document.getElementById("date-picker").value = "";
+    // document.getElementById("date-picker").textContent = "";
+    // document.querySelector(".flatpickr-input .form-control .input").textContent = "";
+    // document.querySelector(".flatpickr-input .form-control .input").value = "";
+};
+
+document.getElementById("exit").addEventListener("click", function () {
+    exitAdd();
 });
 
 var setting = false;
@@ -69,6 +89,11 @@ flatpickr("#date-picker", {
 });
 
 var currentFrequency;
+
+var dropdown = document.getElementsByClassName("dropdown")[0];
+dropdown.addEventListener("click", function () {
+    dropdown.classList.toggle("clicked");
+});
 
 var dropdowns = document.querySelectorAll(".dropdown-content > a");
 
@@ -178,8 +203,7 @@ var getTanks = function (type) {
                 settingsContainer.appendChild(tankContainer);
                 // }
             });
-        }
-        else {
+
             var fishContainer = document.getElementsByClassName('fish')[0];
             fishContainer.innerHTML = "";
 
@@ -200,6 +224,7 @@ var getTanks = function (type) {
                 tankHeaderButton.addEventListener('click', function () {
                     currentTank = this.dataset.tank;
                     document.getElementById("container").style.display = "block";
+                    document.getElementById("container").classList.remove("fish");
                 });
 
                 tankHeader.appendChild(tankHeaderText);
@@ -237,6 +262,91 @@ var getTanks = function (type) {
 
                 fishContainer.appendChild(tankContainer);
             });
+
+            var tanks = document.querySelectorAll(".tank");
+            if (document.getElementsByClassName("fish")[0].clientHeight < document.getElementsByClassName("fish")[0].scrollHeight) {
+                tanks.forEach(t => {
+                    t.classList.add("scroll");
+                });
+            }
+            else {
+                tanks.forEach(t => {
+                    t.classList.remove("scroll");
+                });
+            }
+        }
+        else {
+            var fishContainer = document.getElementsByClassName('fish')[0];
+            fishContainer.innerHTML = "";
+
+            Object.keys(tankList).forEach(t => {
+                var tankContainer = document.createElement('div');
+                tankContainer.classList.add('tank');
+
+                var tankHeader = document.createElement('div');
+                tankHeader.classList.add('tank-header');
+
+                var tankHeaderText = document.createElement('div');
+                tankHeaderText.textContent = t;
+
+                var tankHeaderButton = document.createElement('div');
+                tankHeaderButton.classList.add('tank-header-button');
+                tankHeaderButton.classList.add("fas", "fa-plus-square");
+                tankHeaderButton.dataset.tank = t;
+                tankHeaderButton.addEventListener('click', function () {
+                    currentTank = this.dataset.tank;
+                    document.getElementById("container").style.display = "block";
+                    document.getElementById("container").classList.remove("fish");
+                });
+
+                tankHeader.appendChild(tankHeaderText);
+                tankHeader.appendChild(tankHeaderButton);
+
+                var itemsContainer = document.createElement('div');
+                itemsContainer.classList.add('items');
+
+                tankContainer.appendChild(tankHeader);
+                tankContainer.appendChild(itemsContainer);
+
+                tankList[t].forEach(n => {
+                    if (n.schedule.frequency === "Daily") {
+                        itemsContainer.innerHTML += itemStart + n.task + itemEnd;
+                    }
+                    if (n.schedule.frequency === "Weekly") {
+                        var start = luxon.DateTime.fromISO(n.schedule.first);
+                        var end = luxon.DateTime.local();
+                        var diffInDays = end.diff(start, 'days');
+                        console.log(diffInDays.toObject().days % 7 < 1);
+                        if (diffInDays.toObject().days % 7 < 1 && diffInDays.toObject().days > 0) {
+                            itemsContainer.innerHTML += itemStart + n.task + itemEnd;
+                        }
+                    }
+                    if (n.schedule.frequency === "Monthly") {
+                        var start = luxon.DateTime.fromISO(n.schedule.first);
+                        var end = luxon.DateTime.local();
+                        var diffInDays = end.diff(start, 'days');
+                        console.log(diffInDays.toObject().days % 28);
+                        if (diffInDays.toObject().days % 28 < 1 && diffInDays.toObject().days > 0) {
+                            itemsContainer.innerHTML += itemStart + n.task + itemEnd;
+                        }
+                    }
+                });
+
+                fishContainer.appendChild(tankContainer);
+            });
+
+
+            var tanks = document.querySelectorAll(".tank");
+            if (document.getElementsByClassName("fish")[0].clientHeight < document.getElementsByClassName("fish")[0].scrollHeight) {
+                tanks.forEach(t => {
+                    t.classList.add("scroll");
+                });
+            }
+            else {
+                tanks.forEach(t => {
+                    t.classList.remove("scroll");
+                });
+            }
         }
     }).catch(function (err) {
         console.log(err);

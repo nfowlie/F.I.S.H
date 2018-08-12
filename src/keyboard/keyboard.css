@@ -227,15 +227,15 @@ body {
     display: block;
 }
 
-.dropdown-content a:hover {
+.dropdown-content a.clicked {
     background-color: #f1f1f1
 }
 
-.dropdown:hover .dropdown-content {
+.dropdown.clicked .dropdown-content {
     display: block;
 }
 
-.dropdown:hover .dropbtn {
+.dropdown.clicked .dropbtn {
     background-color: #f1f1f1;
 }
 
